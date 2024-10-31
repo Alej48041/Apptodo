@@ -13,7 +13,6 @@ class CategoryController extends Controller
         return response()->json(Category::all());
     }
 
-    // Método para crear una nueva categoría
     public function store(Request $request)
     {
         $request->validate(['name' => 'required|string|max:255']);
@@ -21,7 +20,16 @@ class CategoryController extends Controller
         return response()->json($category, 201);
     }
 
-    // Método para eliminar una categoría
+    public function update(Request $request, $id)
+    {
+        $request->validate(['name' => 'required|string|max:255']);
+        $category = Category::findOrFail($id);
+        $category->name = $request->name;
+        $category->save();
+
+        return response()->json($category);
+    }
+
     public function destroy($id)
     {
         $category = Category::findOrFail($id);
