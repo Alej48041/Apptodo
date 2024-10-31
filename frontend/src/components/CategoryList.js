@@ -16,12 +16,24 @@ function CategoryList({ categories, fetchCategories }) {
     }
   };
 
+  const handleDeleteCategory = async (categoryId) => {
+    try {
+      await api.delete(`/categories/${categoryId}`);
+      fetchCategories();
+    } catch (error) {
+      console.error('Error deleting category:', error);
+    }
+  };
+
   return (
     <div className="category-list">
       <h2>Categories</h2>
       <ul>
         {categories.map((category) => (
-          <li key={category.id}>{category.name}</li>
+          <li key={category.id}>
+            {category.name}
+            <button onClick={() => handleDeleteCategory(category.id)}>Delete</button>
+          </li>
         ))}
       </ul>
       <form onSubmit={handleAddCategory}>

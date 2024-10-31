@@ -32,19 +32,17 @@ class TaskController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
-            'is_completed' => 'boolean',
+            'title' => 'sometimes|string|max:255', 
+            'category_id' => 'sometimes|exists:categories,id',  
+            'is_completed' => 'sometimes|boolean',  
         ]);
-
+    
         $task = Task::findOrFail($id);
-        $task->title = $request->title;
-        $task->category_id = $request->category_id;
-        $task->is_completed = $request->is_completed;
-        $task->save();
-
+        $task->update($request->only(['title', 'category_id', 'is_completed']));
+    
         return response()->json($task);
     }
+    
 
     public function destroy($id)
     {
